@@ -13,9 +13,6 @@ from herramientas import (
 
 load_dotenv()
 
-# ---------------------------------------------------------
-# 1. Modelo y agente
-# ---------------------------------------------------------
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     temperature=0
@@ -39,7 +36,7 @@ agente_ejecutor = create_agent(
 )
 
 # ---------------------------------------------------------
-# 2. Función reutilizable: hacer una pregunta al agente
+# Hacer una pregunta al agente
 # ---------------------------------------------------------
 def hacer_consulta_al_agente():
     pregunta = st.text_input("Pregúntale algo al Agente: ")
@@ -57,9 +54,7 @@ def hacer_consulta_al_agente():
             ultimo_mensaje = respuesta["messages"][-1]
             contenido = ultimo_mensaje.content
 
-            # A veces el contenido viene como texto plano (str),
-            # y a veces como una lista de bloques tipo [{'type': 'text', 'text': '...'}].
-            # Aquí lo normalizamos para quedarnos solo con el texto (sin corchetes).
+            
             if isinstance(contenido, list):
                 salida = "".join(
                     bloque.get("text", "") if isinstance(bloque, dict) else str(bloque)
@@ -78,8 +73,7 @@ def hacer_consulta_al_agente():
             st.error(f"✖️ Ocurrió un error al procesar la consulta: {e}")
 
 
-# ---------------------------------------------------------
-# 3. Configuración de página y estado inicial
+
 # ---------------------------------------------------------
 st.set_page_config(page_title="Agente Mercado Central 24H", layout="wide")
 
@@ -102,13 +96,22 @@ st.markdown("""
 if "datos_historial" not in st.session_state:
     st.session_state["datos_historial"] = []
 
+# Banderas para saber si hay PDF/Excel cargado en esta sesión
+if "pdf_cargado" not in st.session_state:
+    st.session_state["pdf_cargado"] = False
+    st.session_state["nombre_pdf"] = None
+
+if "excel_cargado" not in st.session_state:
+    st.session_state["excel_cargado"] = False
+    st.session_state["nombre_excel"] = None
+
 col_izquierda, col_derecha = st.columns([1, 3])
 
 # ---------------------------------------------------------
-# 4. Columna izquierda: info + menú
+# Aqui empieza la columna izquierda
 # ---------------------------------------------------------
 with col_izquierda:
-    #st.markdown("## 🤖 Mercado Central 24H")
+    st.markdown("## 🤖 Mercado Central 24H")
 
     st.markdown("""
     <div style="
@@ -124,14 +127,28 @@ with col_izquierda:
 
     st.divider()
     st.markdown("### 📋 Estado")
-    st.success("📄 PDF")
-    st.caption("No hay ningún PDF cargado")
-    st.success("📊 Excel")
-    st.caption("No hay ningún Excel cargado")
+
+    # ✅ Usamos contenedores dinámicos en lugar de funciones estáticas
+    with st.container():
+        if st.session_state["pdf_cargado"]:
+            st.success(f"🟢 PDF: {st.session_state['nombre_pdf']}")
+            st.caption("ℹ️ Documento cargado con éxito.")
+        else:
+            st.info("📄 PDF")
+            st.caption("🔴 No hay ningún PDF cargado")
+
+    with st.container():
+        if st.session_state["excel_cargado"]:
+            st.success(f"🟢 Excel: {st.session_state['nombre_excel']}")
+            st.caption("ℹ️ Tabla cargada con éxito.")
+        else:
+            st.info("📊 Excel")
+            st.caption("🔴 No hay ningún Excel cargado")
+            
     st.divider()
 
 # ---------------------------------------------------------
-# 5. Columna derecha: menú + contenido según la opción elegida
+# Aqui empieza la columna derecha
 # ---------------------------------------------------------
 with col_derecha:
     st.markdown("## 💬 Asistente IA")
@@ -152,30 +169,37 @@ with col_derecha:
 
         if "1." in opcion:
             st.markdown("#### 📄 Cargar PDF")
-            archivo_pdf = st.file_uploader("Selecciona tu archivo PDF", type=["pdf"])
-
+            archivo_pdf = st.file_uploader("Selecciona tu archivo PDF", type=["pdf"], key="uploader_pdf")
             if archivo_pdf:
-                with open(archivo_pdf.name, "wb") as f:
-                    f.write(archivo_pdf.getbuffer())
-                if agregar_pdf(archivo_pdf.name):
-                    st.success(f"✔️ {archivo_pdf.name} cargado correctamente.")
-                    hacer_consulta_al_agente()
-            else:
-                limpiar_pdf()
+                # 🛑 SOLO procesamos y recargamos si NO estaba marcado como cargado antes
+                if not st.session_state["pdf_cargado"]:
+                    with open(archivo_pdf.name, "wb") as f:
+                        f.write(archivo_pdf.getbuffer())
+                    if agregar_pdf(archivo_pdf.name):
+                        st.session_state["pdf_cargado"] = True
+                        st.session_state["nombre_pdf"] = archivo_pdf.name
+                        st.rerun()  # Ahora sí, solo recarga una vez
+                
+                # Esto se muestra cuando ya está cargado y evita el bucle
+                st.success(f"✔️ {st.session_state['nombre_pdf']} cargado correctamente.")
+                hacer_consulta_al_agente()
 
         elif "2." in opcion:
             st.markdown("#### 📊 Cargar Excel")
-            archivo_excel = st.file_uploader("Selecciona tu archivo Excel", type=["xlsx", "xls"])
+            archivo_excel = st.file_uploader("Selecciona tu archivo Excel", type=["xlsx", "xls"], key="uploader_excel")
 
             if archivo_excel:
-                with open(archivo_excel.name, "wb") as f:
-                    f.write(archivo_excel.getbuffer())
-                if agregar_excel(archivo_excel.name):
-                    st.success(f"✔️ {archivo_excel.name} cargado correctamente.")
-                    hacer_consulta_al_agente()
-            else:
-                limpiar_excel()
-
+                # 🛑 Lo mismo para el Excel: evitamos repetir el proceso si ya está activo
+                if not st.session_state["excel_cargado"]:
+                    with open(archivo_excel.name, "wb") as f:
+                        f.write(archivo_excel.getbuffer())
+                    if agregar_excel(archivo_excel.name):
+                        st.session_state["excel_cargado"] = True
+                        st.session_state["nombre_excel"] = archivo_excel.name
+                        st.rerun()  # Solo recarga una vez
+                
+                st.success(f"✔️ {st.session_state['nombre_excel']} cargado correctamente.")
+                hacer_consulta_al_agente()
         elif "3." in opcion:
             st.markdown("#### 🧠 Hacer una consulta al agente")
             hacer_consulta_al_agente()
@@ -184,6 +208,13 @@ with col_derecha:
             limpiar_pdf()
             limpiar_excel()
             st.session_state["datos_historial"] = []
+            st.session_state["pdf_cargado"] = False
+            st.session_state["nombre_pdf"] = None
+            st.session_state["excel_cargado"] = False
+            st.session_state["nombre_excel"] = None
+            
+            # ✅ Limpia los estados a la izquierda inmediatamente al salir
+            st.rerun()
             st.success("👋 ¡Gracias por usar el Agente de IA de Mercado Central 24H, hasta luego!")
 
         else:
