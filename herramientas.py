@@ -5,6 +5,7 @@ from langchain_core.tools import tool # Decorador
 from langchain_google_genai import GoogleGenerativeAIEmbeddings # Conector que envia archivos a Gemini
 from langchain_text_splitters import RecursiveCharacterTextSplitter # cortar texto en fragmentos
 from langchain_community.vectorstores import FAISS # Es la memoria temporal
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 
 # Variable globales
@@ -47,10 +48,10 @@ def agregar_pdf(_pdf):
     separador_de_texto = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     textos = separador_de_texto.create_documents([acumulador_datos_texto])
 
-    # 3. Traducimos los fragmentos a números (vectores) con el modelo de Google
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    # 3. Traducimos los fragmentos a números (vectores) 
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     
-    # 4. Guardamos los vectores en nuestra base de datos en la memoria RAM
+
     respuesta_BaseDeDatos = FAISS.from_documents(textos, embeddings)
     
     print(f"✅ ¡Archivo PDF procesado e indexado en la memoria!\n")
@@ -105,8 +106,45 @@ def agregar_excel(_excel):
 @tool 
 def consultar_info_excel(informa:str)-> str:
     """
-    Utiliza esta herramienta cuando el usuario pida resúmenes, estadísticas,revisar filas, columnas o hacer cálculos numéricos sobre el archivo de Excel cargado.
-    """
+        Utiliza esta herramienta SIEMPRE que el usuario haga preguntas sobre la información contenida en el archivo Excel cargado.
+
+        Esta herramienta permite responder consultas relacionadas con:
+
+        - Productos.
+        - Marcas.
+        - Categorías.
+        - Subcategorías.
+        - Códigos de barras (EAN).
+        - Unidades.
+        - Ubicaciones.
+        - Stock actual.
+        - Stock mínimo.
+        - Stock máximo.
+        - Lotes.
+        - Fechas de fabricación.
+        - Fechas de vencimiento.
+        - Costos.
+        - Precios de venta.
+        - Proveedores.
+        - Tiempo de reposición.
+
+        También debe utilizarse cuando el usuario solicite:
+
+        - Buscar productos.
+        - Listar categorías o subcategorías.
+        - Mostrar marcas.
+        - Contar registros.
+        - Filtrar información.
+        - Comparar productos.
+        - Calcular promedios, máximos, mínimos o totales.
+        - Analizar inventario.
+        - Detectar productos con bajo stock.
+        - Detectar productos próximos a vencer.
+        - Generar resúmenes o estadísticas.
+        - Responder cualquier pregunta cuya respuesta se encuentre en el archivo Excel.
+
+        Nunca utilices la herramienta del PDF cuando la información solicitada pertenezca al archivo Excel.
+        """
     
     global datos_respuesta_excel
     
@@ -132,3 +170,14 @@ def herramientas_cargadas():
     y se las entrega ordenadas al agente principal.
     """
     return [consultar_info_pdf, consultar_info_excel]
+
+
+# este codigo sirve para limpiar la pagina de los documentos y el chat no se quede con la info
+def limpiar_pdf():
+    global respuesta_BaseDeDatos, acumulador_datos_texto
+    respuesta_BaseDeDatos = None
+    acumulador_datos_texto = ""
+
+def limpiar_excel():
+    global datos_respuesta_excel
+    datos_respuesta_excel = None
