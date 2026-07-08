@@ -9,7 +9,9 @@ from herramientas import (
     agregar_excel,
     limpiar_pdf,
     limpiar_excel,
+    
 )
+import herramientas
 
 load_dotenv()
 
@@ -20,18 +22,24 @@ llm = ChatGoogleGenerativeAI(
 
 SYSTEM_PROMPT = (
     "Eres un Agente de Inteligencia Artificial experto en gestión de inventarios y análisis de datos para MERCADO CENTRAL 24 HORAS. "
-    "Tu objetivo es ayudar al usuario a entender sus documentos (PDFs) y analizar sus tablas de datos (Excel).\n\n"
+    "Tu objetivo es ayudar al usuario a entender sus documentos (PDFs), analizar sus tablas de datos (Excel) y generar visualizaciones gráficas.\n\n"
+    
+    "ESTRUCTURA DEL EXCEL DISPONIBLE:\n"
+    "Las columnas exactas del archivo son: Categoría, Subcategoría, Descripción, Marca, Stock, Ubicación, Fecha de Fabricación, Fecha de Vencimiento, Costo Unitario, Precio de Venta Unitario.\n\n"
+    
     "REGLAS ABSOLUTAS DE TRABAJO:\n"
-    "1. Si el usuario te pregunta por políticas, textos o reglas del supermercado, usa SIEMPRE la herramienta 'consultar_info_pdf'.\n"
-    "2. Si el usuario te pide cálculos, estadísticas, revisar stock o resúmenes de tablas, usa SIEMPRE la herramienta 'consultar_info_excel'.\n"
-    "3. Responde siempre con un tono profesional, claro, usando viñetas y emojis para estructurar los reportes de manera ejecutiva y legible."
+    "1. Si el usuario te pregunta por políticas, textos, preguntas frecuentes o reglas del supermercado, usa SIEMPRE la herramienta 'consultar_info_pdf'.\n"
+    "2. Si el usuario te pide cálculos, estadísticas, revisar stock, precios o resúmenes numéricos, usa SIEMPRE la herramienta 'consultar_info_excel'.\n"
+    "3. Si el usuario te pide una gráfica, un gráfico de barras, un top, o la comparación visual de datos del Excel, usa SIEMPRE la herramienta 'generar_grafica_excel'.\n"
+    "   - Asigna correctamente la columna de texto/categoría (e.g., 'Categoría', 'Marca' o 'Descripción') y la columna numérica (e.g., 'Stock', 'Costo Unitario' o 'Precio de Venta Unitario').\n"
+    "4. Responde siempre con un tono profesional, claro, usando viñetas y emojis para estructurar los reportes de manera ejecutiva y legible."
 )
 
-herramientas = herramientas_cargadas()
+lista_herramientas = herramientas_cargadas()
 
 agente_ejecutor = create_agent(
     model=llm,
-    tools=herramientas,
+    tools=lista_herramientas,
     system_prompt=SYSTEM_PROMPT,
 )
 
@@ -51,6 +59,7 @@ def hacer_consulta_al_agente():
             ]
 
             respuesta = agente_ejecutor.invoke({"messages": mensajes})
+            st.write("🔍 DEBUG:", respuesta["messages"])
             ultimo_mensaje = respuesta["messages"][-1]
             contenido = ultimo_mensaje.content
 
@@ -65,6 +74,11 @@ def hacer_consulta_al_agente():
 
             st.markdown("### 🤖 Respuesta del Agente")
             st.markdown(salida)
+            
+            if os.path.exists("grafico_inventario.png"):
+                st.image("grafico_inventario.png", 
+                caption="📊 Visualización de Datos - Mercado Central 24H", use_container_width=True)
+                os.remove("grafico_inventario.png")  # La eliminamos para no repetirla en futuras preguntas
 
             st.session_state["datos_historial"].append({"role": "user", "content": pregunta})
             st.session_state["datos_historial"].append({"role": "assistant", "content": salida})
@@ -132,7 +146,7 @@ with col_izquierda:
     with st.container():
         if st.session_state["pdf_cargado"]:
             st.success(f"🟢 PDF: {st.session_state['nombre_pdf']}")
-            st.caption("ℹ️ Documento cargado con éxito.")
+            st.caption("✅ Documento cargado con éxito.")
         else:
             st.info("📄 PDF")
             st.caption("🔴 No hay ningún PDF cargado")
@@ -140,7 +154,7 @@ with col_izquierda:
     with st.container():
         if st.session_state["excel_cargado"]:
             st.success(f"🟢 Excel: {st.session_state['nombre_excel']}")
-            st.caption("ℹ️ Tabla cargada con éxito.")
+            st.caption("✅ Documento cargado con éxito ")
         else:
             st.info("📊 Excel")
             st.caption("🔴 No hay ningún Excel cargado")
@@ -171,7 +185,6 @@ with col_derecha:
             st.markdown("#### 📄 Cargar PDF")
             archivo_pdf = st.file_uploader("Selecciona tu archivo PDF", type=["pdf"], key="uploader_pdf")
             if archivo_pdf:
-                # 🛑 SOLO procesamos y recargamos si NO estaba marcado como cargado antes
                 if not st.session_state["pdf_cargado"]:
                     with open(archivo_pdf.name, "wb") as f:
                         f.write(archivo_pdf.getbuffer())
@@ -189,7 +202,6 @@ with col_derecha:
             archivo_excel = st.file_uploader("Selecciona tu archivo Excel", type=["xlsx", "xls"], key="uploader_excel")
 
             if archivo_excel:
-                # 🛑 Lo mismo para el Excel: evitamos repetir el proceso si ya está activo
                 if not st.session_state["excel_cargado"]:
                     with open(archivo_excel.name, "wb") as f:
                         f.write(archivo_excel.getbuffer())
@@ -218,4 +230,4 @@ with col_derecha:
             st.success("👋 ¡Gracias por usar el Agente de IA de Mercado Central 24H, hasta luego!")
 
         else:
-            st.info("👈 Selecciona una opción del menú para comenzar.")
+            st.info("😃👆Selecciona una opción del menú para comenzar.")

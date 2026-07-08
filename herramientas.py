@@ -6,12 +6,17 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings # Conector que e
 from langchain_text_splitters import RecursiveCharacterTextSplitter # cortar texto en fragmentos
 from langchain_community.vectorstores import FAISS # Es la memoria temporal
 from langchain_community.embeddings import HuggingFaceEmbeddings
+import matplotlib.pyplot as plt
+from torch import cat # Para crear graficos
 
 
 # Variable globales
 acumulador_datos_texto = ""
 
 respuesta_BaseDeDatos = None
+
+grafica_generada = None
+
 
 
 #FUNCIÓN PARA LEER PDF
@@ -114,19 +119,15 @@ def consultar_info_excel(informa:str)-> str:
         - Marcas.
         - Categorías.
         - Subcategorías.
-        - Códigos de barras (EAN).
         - Unidades.
         - Ubicaciones.
-        - Stock actual.
-        - Stock mínimo.
-        - Stock máximo.
-        - Lotes.
+        - Stock.
         - Fechas de fabricación.
         - Fechas de vencimiento.
         - Costos.
         - Precios de venta.
-        - Proveedores.
-        - Tiempo de reposición.
+        
+        
 
         También debe utilizarse cuando el usuario solicite:
 
@@ -138,7 +139,7 @@ def consultar_info_excel(informa:str)-> str:
         - Comparar productos.
         - Calcular promedios, máximos, mínimos o totales.
         - Analizar inventario.
-        - Detectar productos con bajo stock.
+        - Detectar productos con stock.
         - Detectar productos próximos a vencer.
         - Generar resúmenes o estadísticas.
         - Responder cualquier pregunta cuya respuesta se encuentre en el archivo Excel.
@@ -164,12 +165,67 @@ def consultar_info_excel(informa:str)-> str:
     except Exception as e:
         return f"✖️ Error al procesar la consulta en el archivo de Excel: {e}"
     
+#================= genera la grafica =========================
+
+@tool
+def generar_grafica_excel(columna_categoria: str, columna_valor: str, top_n: int = 5) -> str:
+    """
+    Genera una gráfica de barras agrupando los datos del Excel.
+    Úsala SIEMPRE que el usuario pida una gráfica, un gráfico de barras o la comparación visual de datos.
+
+    columna_categoria: Nombre exacto de la columna de texto a agrupar. Puede ser: 'Categoría', 'Subcategoría', 'Marca', 'Descripción' o 'Ubicación'.
+    columna_valor: Nombre exacto de la columna numérica a sumar o comparar. Puede ser: 'Stock', 'Costo Unitario' o 'Precio de Venta Unitario'.
+    top_n: Cantidad de elementos a mostrar en el gráfico.
+    """
+    global datos_respuesta_excel
+    
+    # 1. Validar si hay Excel cargado
+    if datos_respuesta_excel is None:
+        return "⚠️ No se ha cargado ningún archivo de Excel. Por favor, carga un archivo primero."
+    
+    # 2. Validar que la columna de agrupación exista
+    if columna_categoria not in datos_respuesta_excel.columns:
+        return f"✖️ La columna '{columna_categoria}' no existe en el Excel. Columnas disponibles: {list(datos_respuesta_excel.columns)}"
+    
+    # 3. Validar que la columna numérica exista
+    if columna_valor not in datos_respuesta_excel.columns:
+        return f"✖️ La columna '{columna_valor}' no existe en el Excel. Columnas disponibles: {list(datos_respuesta_excel.columns)}"
+    
+    try: 
+        agrupado = (
+            datos_respuesta_excel.groupby(columna_categoria)[columna_valor]
+            .sum()
+            .sort_values(ascending=False)
+            .head(top_n)
+        )
+        
+        fig, ax = plt.subplots(figsize=(7, 4.5))
+        agrupado.plot(kind="bar", ax=ax, color="#43A047")
+        ax.set_title(f"Top {top_n} {columna_categoria} por {columna_valor}", fontsize=12, fontweight="bold")
+        ax.set_ylabel(columna_valor)
+        ax.set_xlabel(columna_categoria)
+        plt.xticks(rotation=30, ha="right")
+        plt.tight_layout()
+
+        # Guardamos la imagen física para Streamlit
+        fig.savefig("grafico_inventario.png", dpi=300)
+        plt.close(fig)
+        
+        resumen = ", ".join(f"{cat}: {val}" for cat, val in agrupado.items())
+        return f"✅ Gráfica generada correctamente y guardada en 'grafico_inventario.png'. Top {top_n} de {columna_categoria}: {resumen}"
+    
+    except Exception as e:
+        return f"✖️ Error al generar la gráfica: {e}"
+
+
+#================= termina de generar la grafica =========================
+    
 def herramientas_cargadas():
     """
     Agrupa las herramientas de análisis disponibles 
     y se las entrega ordenadas al agente principal.
     """
-    return [consultar_info_pdf, consultar_info_excel]
+    return [consultar_info_pdf, consultar_info_excel, generar_grafica_excel]
 
 
 # este codigo sirve para limpiar la pagina de los documentos y el chat no se quede con la info
