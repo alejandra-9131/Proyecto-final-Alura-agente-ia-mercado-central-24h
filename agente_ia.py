@@ -59,7 +59,6 @@ def hacer_consulta_al_agente():
             ]
 
             respuesta = agente_ejecutor.invoke({"messages": mensajes})
-            st.write("🔍 DEBUG:", respuesta["messages"])
             ultimo_mensaje = respuesta["messages"][-1]
             contenido = ultimo_mensaje.content
 
@@ -217,17 +216,20 @@ with col_derecha:
             hacer_consulta_al_agente()
 
         elif "4." in opcion:
+            # 1. Limpiamos las variables globales de memoria
             limpiar_pdf()
             limpiar_excel()
+
+            # 2. Reiniciamos todas las variables de sesión
             st.session_state["datos_historial"] = []
             st.session_state["pdf_cargado"] = False
             st.session_state["nombre_pdf"] = None
             st.session_state["excel_cargado"] = False
             st.session_state["nombre_excel"] = None
-            
-            # ✅ Limpia los estados a la izquierda inmediatamente al salir
-            st.rerun()
+
+            # 3. Mostramos el mensaje de despedida PRIMERO
             st.success("👋 ¡Gracias por usar el Agente de IA de Mercado Central 24H, hasta luego!")
+            st.info("💡 Si deseas comenzar de nuevo, selecciona otra opción del menú.")
 
         else:
             st.info("😃👆Selecciona una opción del menú para comenzar.")
