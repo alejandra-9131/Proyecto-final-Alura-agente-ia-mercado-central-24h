@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🛒 Agente IA — Mercado Central 24H
-### Gestión inteligente de inventario impulsada por IA generativa
+### Gestión inteligente impulsada por IA generativa
 
 *Un asistente conversacional construido con LangChain y Google Gemini para que "Mercado Central 24 Horas" nunca más tenga que buscar información a mano.*
 
@@ -23,7 +23,7 @@
 
 <br/>
 
-> 💡 **Nota:** los badges de arriba se ven correctamente en GitHub (necesitan conexión a internet para cargar). Si los abres en un editor local sin conexión, verás el link en texto plano — es normal, no es un error del archivo.
+
 
 ---
 
@@ -43,7 +43,7 @@
 
 ## 📖 Introducción
 
-**Mercado Central 24 Horas** es un supermercado ficticio que necesitaba resolver un problema muy real: su equipo perdía tiempo buscando información dispersa en manuales, políticas, catálogos y hojas de cálculo cada vez que un cliente o un empleado tenía una duda.
+**Mercado Central 24 Horas** es un supermercado ficticio que necesitaba resolver un problema muy real: su equipo perdía tiempo buscando información dispersa en manuales, políticas y hojas de cálculo cada vez que un cliente o un empleado tenía una duda.
 
 Este proyecto nace para resolver justo eso. Es un **agente de inteligencia artificial conversacional**, construido con LangChain y el modelo **Gemini de Google**, capaz de leer, entender y responder preguntas sobre el inventario, las políticas de la tienda y los procedimientos internos, todo desde una interfaz simple hecha en **Streamlit**.
 
@@ -57,7 +57,7 @@ El agente fue diseñado para:
 - 📄 Responder preguntas basadas en **documentos PDF** (políticas, reglamentos, manuales, FAQ).
 - 📊 **Generar gráficas** automáticamente a partir de los datos del inventario.
 - 🧠 Mantener el contexto de la conversación para resolver dudas de forma natural, como lo haría un asesor humano.
-- 🔍 Servir como una única fuente de verdad conversacional para empleados y clientes de "Mercado Central 24 Horas".
+- 🔍 Servir como una única fuente de verdad conversacional para empleados de "Mercado Central 24 Horas".
 
 ## 🏗️ Arquitectura
 
@@ -170,8 +170,8 @@ El agente utiliza los siguientes documentos como base de conocimiento:
 
 **1. Clonar el repositorio**
 ```bash
-git clone <URL_DEL_REPOSITORIO>
-cd PROYECTO_FINAL_AGENTES_IA_ALURA_ONE
+git clone https://github.com/alejandra-9131/Proyecto-final-Alura-agente-ia-mercado-central-24h.git
+cd Proyecto-final-Alura-agente-ia-mercado-central-24h
 ```
 
 **2. Crear y activar entorno virtual**
