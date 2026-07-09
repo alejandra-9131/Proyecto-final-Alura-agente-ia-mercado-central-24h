@@ -3,6 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents import create_agent
+from sympy import div
 from herramientas import (
     herramientas_cargadas,
     agregar_pdf,
@@ -191,20 +192,20 @@ with col_derecha:
         border-radius: 8px;
         margin-bottom: 20px;
     ">
-        <p style="margin: 0 0 8px 0; font-size: 1.05rem;">
-            👋 <b>¡Hola! Soy Don Justo</b>, tu Agente Inteligente de Inventarios para el <b>Mercado Central 24 Horas</b>.
+        <p style="margin: 0 0 8px 0; font-size: 1.05rem; color: #333333;"">
+            👋 <b>¡Hola! Soy tu Agente Inteligente</b> para el <b>Mercado Central 24 Horas</b>.
         </p>
         <p style="margin: 0 0 8px 0; color: #333333;">
             Estoy listo para ayudarte a analizar los niveles de inventario, políticas, preguntas frecuentes, reglamento interno y manuales de la empresa.
         </p>
         <p style="margin: 0; color: #1e88e5; font-weight: 500;">
-            📌 <b>Para comenzar:</b> Sube un documento (PDF o Excel) o presiona uno de los botones de Muestras del Mercado en el panel lateral.
+            📌 <b>Para comenzar:</b> Selecciona uno de los botones de Muestras del Mercado en el panel lateral 👇.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     # Etiqueta y Menú
-    st.markdown('<p class="menu-label">SELECCIONA UNA OPCIÓN DEL MENÚ:</p>', unsafe_allow_html=True)
+    st.markdown('<p class="menu-label, color: white">SELECCIONA UNA OPCIÓN DEL MENÚ:</p>', unsafe_allow_html=True)
 
     opcion = st.selectbox(
         "SELECCIONA UNA OPCIÓN DEL MENÚ:",
@@ -268,8 +269,8 @@ with col_derecha:
     else:
         st.markdown("""
             <div class="card-inicial">
-                <div style="font-size: 2rem;">🤪 👇</div>
+                <div style="font-size: 2rem;">🤪 </div>
                 <p class="card-inicial-titulo">Selecciona una opción del menú para comenzar.</p>
-                <p class="card-inicial-subtitulo">Don Justo analizará inmediatamente el inventario activo de tu verdulería o el archivo que cargues.</p>
+                <p class="card-inicial-subtitulo">La IA analizará inmediatamente el inventario activo o el archivo que cargues.</p>
             </div>
         """, unsafe_allow_html=True)

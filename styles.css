@@ -80,7 +80,7 @@
 /* ======== ESTILOS  PARA EL MENÚ ========= */
 
 .menu-label {
-    color: #94a3b8;
+    color: #0c0d0f;
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.8px;
@@ -363,3 +363,58 @@ hr {
 }
 
 /* ====== TARJETA LATERAL "AGENTE IA" (MODO OSCURO)  IZQUIERDO finaliza =====*/
+
+/* --- TEXTO Y CAJAS ST.INFO EN MODO OSCURO LATERAL DERECHO --- */
+[data-testid="stAlert"] {
+    background-color: #0d111d !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 10px !important;
+}
+
+[data-testid="stAlert"] p, 
+[data-testid="stAlert"] span, 
+[data-testid="stAlert"] div {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+/* ====== TEXTO Y CAJAS ST.INFO EN MODO OSCURO LATERAL DERECHO ===== */
+
+/* ====== Estilos para el menu - Modo oscuro INICIA==== */
+
+/* --- ESTILOS PARA LAS OPCIONES INTERNAS DEL MENÚ DESPLEGABLE --- */
+
+/* Menú flotante (la caja que se abre) */
+ul[data-baseweb="menu"] {
+    background-color: #0d111d !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px !important;
+    padding: 6px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Opciones individuales dentro de la lista */
+li[data-baseweb="option"] {
+    background-color: transparent !important;
+    color: #e2e8f0 !important;
+    border-radius: 8px !important;
+    margin-bottom: 4px !important;
+    padding: 10px 14px !important;
+    font-size: 0.95rem !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Efecto al pasar el cursor sobre una opción */
+li[data-baseweb="option"]:hover {
+    background-color: rgba(96, 165, 250, 0.15) !important;
+    color: #60a5fa !important;
+    font-weight: 600 !important;
+}
+
+/* Opción que está seleccionada actualmente */
+li[data-baseweb="option"][aria-selected="true"] {
+    background-color: #397284 !important;
+    color: "#2106f4" !important;
+    font-weight: 700 !important;
+}
+
+/* ====== Estilos para el menu - Modo oscuro FINALIZA==== */
