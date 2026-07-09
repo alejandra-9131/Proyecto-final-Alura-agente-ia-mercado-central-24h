@@ -17,7 +17,7 @@
 ![Matplotlib](https://img.shields.io/badge/MATPLOTLIB-GR%C3%81FICAS-11557C?style=for-the-badge&logo=plotly&logoColor=white)
 ![PyPDF](https://img.shields.io/badge/PYPDF-LECTURA%20PDF-EC1C24?style=for-the-badge)
 
-![Estado](https://img.shields.io/badge/ESTADO-EN%20DESARROLLO-yellow?style=for-the-badge)
+![Estado](https://img.shields.io/badge/ESTADO-EN%20FINALIZADOyellow?style=for-the-badge)
 
 </div>
 
