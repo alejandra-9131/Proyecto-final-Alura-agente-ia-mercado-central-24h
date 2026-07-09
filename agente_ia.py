@@ -274,3 +274,17 @@ with col_derecha:
                 <p class="card-inicial-subtitulo">La IA analizará inmediatamente el inventario activo o el archivo que cargues.</p>
             </div>
         """, unsafe_allow_html=True)
+        
+# ========PIE DE PAGINA ==============
+st.markdown("""
+<div class="footer-container">
+    <p>© 2026 <span class="footer-highlight">Mercado Central 24 Horas</span>. Todos los derechos reservados.</p>
+    <span class="footer-badge">
+        <svg class="shield-pulse" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+        </svg>
+        Impulsado por Agente IA
+    </span>
+</div>
+""", unsafe_allow_html=True)

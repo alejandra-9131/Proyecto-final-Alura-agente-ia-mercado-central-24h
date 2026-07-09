@@ -418,3 +418,55 @@ li[data-baseweb="option"][aria-selected="true"] {
 }
 
 /* ====== Estilos para el menu - Modo oscuro FINALIZA==== */
+
+
+
+/* ====== FOOTER / PIE DE PÁGINA (Alineación Izquierda - Derecha)INICIA ====== */
+.footer-container {
+    margin-top: 50px;
+    padding: 20px 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.footer-container p {
+    margin: 0 !important;
+}
+
+.footer-highlight {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.footer-badge {
+    background-color: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+/* ====== FOOTER / PIE DE PÁGINA (Alineación Izquierda - Derecha) FINALIZA ====== */
+
+
+/* ====== Animación de pulso para el escudo ======  */
+@keyframes pulse-shield {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.95); }
+}
+
+.shield-pulse {
+    animation: pulse-shield 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+/* ====== Animación de pulso para el escudo ======  */
