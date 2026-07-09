@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🛒 Agente IA — Mercado Central 24H
-### Gestión inteligente impulsada por IA generativa
+### Gestión inteligente de inventario impulsada por IA generativa
 
 *Un asistente conversacional construido con LangChain y Google Gemini para que "Mercado Central 24 Horas" nunca más tenga que buscar información a mano.*
 
@@ -17,13 +17,13 @@
 ![Matplotlib](https://img.shields.io/badge/MATPLOTLIB-GR%C3%81FICAS-11557C?style=for-the-badge&logo=plotly&logoColor=white)
 ![PyPDF](https://img.shields.io/badge/PYPDF-LECTURA%20PDF-EC1C24?style=for-the-badge)
 
-![Estado](https://img.shields.io/badge/ESTADO-EN%20FINALIZADOyellow?style=for-the-badge)
+![Estado](https://img.shields.io/badge/ESTADO-EN%20FINALIZADO-yellow?style=for-the-badge)
 
 </div>
 
 <br/>
 
-
+> 💡 **Nota:** los badges de arriba se ven correctamente en GitHub (necesitan conexión a internet para cargar). Si los abres en un editor local sin conexión, verás el link en texto plano — es normal, no es un error del archivo.
 
 ---
 
@@ -43,7 +43,7 @@
 
 ## 📖 Introducción
 
-**Mercado Central 24 Horas** es un supermercado ficticio que necesitaba resolver un problema muy real: su equipo perdía tiempo buscando información dispersa en manuales, políticas y hojas de cálculo cada vez que un cliente o un empleado tenía una duda.
+**Mercado Central 24 Horas** es un supermercado ficticio que necesitaba resolver un problema muy real: su equipo perdía tiempo buscando información dispersa en manuales, políticas, catálogos y hojas de cálculo cada vez que un cliente o un empleado tenía una duda.
 
 Este proyecto nace para resolver justo eso. Es un **agente de inteligencia artificial conversacional**, construido con LangChain y el modelo **Gemini de Google**, capaz de leer, entender y responder preguntas sobre el inventario, las políticas de la tienda y los procedimientos internos, todo desde una interfaz simple hecha en **Streamlit**.
 
@@ -57,7 +57,7 @@ El agente fue diseñado para:
 - 📄 Responder preguntas basadas en **documentos PDF** (políticas, reglamentos, manuales, FAQ).
 - 📊 **Generar gráficas** automáticamente a partir de los datos del inventario.
 - 🧠 Mantener el contexto de la conversación para resolver dudas de forma natural, como lo haría un asesor humano.
-- 🔍 Servir como una única fuente de verdad conversacional para empleados de "Mercado Central 24 Horas".
+- 🔍 Servir como una única fuente de verdad conversacional para empleados y clientes de "Mercado Central 24 Horas".
 
 ## 🏗️ Arquitectura
 
@@ -205,39 +205,46 @@ streamlit run agente_ia.py
 ## 💬 Ejemplo de uso
 
 ```
-🧑 Usuario: ¿Cuántas unidades de leche entera tenemos en inventario?
-🤖 Agente: Actualmente hay 48 unidades de Leche Entera en inventario,
-           con un precio unitario de $3.200. 
+🧑 Usuario: Hola, dame una gráfica acerca de los 5 producto que mas tengas stock
+🤖 Agente: ¡Claro! Aquí tienes la gráfica de los 5 productos con mayor 
+           stock en tu inventario:
+
+           📊 Top 5 Productos con Mayor Stock:
+           • Leche UHT Entera 1L: 800 unidades
+           • Aceite de Soya 900ml: 750 unidades
+           • Cerveza Clara Lata 355ml: 500 unidades
+           • Lavaplatos Líquido Neutro 500ml: 500 unidades
+           • Café Tostado y Molido 500g: 470 unidades
+
+           [Genera y muestra la gráfica de barras correspondiente] 📈
 
 🧑 Usuario: ¿Cuál es la política de devoluciones?
 🤖 Agente: Según el reglamento interno, los clientes pueden solicitar 
            cambios o devoluciones dentro de los 8 días posteriores 
            a la compra, presentando la factura original...
-
-🧑 Usuario: Genérame una gráfica de los productos con menor stock
-🤖 Agente: [Genera y muestra una gráfica de barras con los 10 
-           productos con menor existencia] 📊
 ```
 
 ## 🖼️ Capturas de pantalla
 
-> *Espacio reservado para las capturas del proyecto.*
+**Interfaz principal**
 
-**Interfaz principal (Frontend)**
+Pantalla de bienvenida del agente, con el estado de los documentos cargados en el panel lateral.
 
-`(Aquí va la captura del chat principal)`
+![Interfaz principal](./capturas/01_interfaz_principal.png)
 
 **Carga de documentos**
 
-`(Aquí va la captura del panel de carga de PDF/Excel)`
+Selección y carga de un PDF desde el menú — el agente confirma cuando el documento quedó listo para consultarse.
 
-**Ejemplo de consulta al agente**
-
-`(Aquí va la captura de una conversación con el agente)`
+![Carga de documentos](./capturas/02_carga_documentos.png)
 
 **Gráfica generada por el agente**
 
-`(Aquí va la captura de una gráfica generada)`
+El usuario pregunta por los productos con mayor stock y el agente responde con base en el Excel de inventario cargado, generando además la gráfica correspondiente con matplotlib.
+
+![Consulta que genera la gráfica](./capturas/03_ejemplo_consulta.png)
+
+![Gráfica generada](./capturas/04_grafica_generada.png)
 
 ---
 
