@@ -23,7 +23,7 @@
 
 <br/>
 
-> 💡 **Nota:** los badges de arriba se ven correctamente en GitHub (necesitan conexión a internet para cargar). Si los abres en un editor local sin conexión, verás el link en texto plano — es normal, no es un error del archivo.
+
 
 ---
 
