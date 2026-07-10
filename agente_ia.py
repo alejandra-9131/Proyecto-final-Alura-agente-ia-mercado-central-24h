@@ -46,14 +46,7 @@ SYSTEM_PROMPT = (
     "4. Responde siempre con un tono profesional, claro, usando viñetas y emojis para estructurar los reportes de manera ejecutiva y legible."
 )
 
-#lista_herramientas = herramientas_cargadas()
-
-#agente_ejecutor = create_agent(
-#    model=llm,
-#    tools=lista_herramientas,
-#    system_prompt=SYSTEM_PROMPT,
-#)
-
+ 
 # ---------------------------------------------------------
 # Función para hacer preguntas al agente
 # ---------------------------------------------------------
