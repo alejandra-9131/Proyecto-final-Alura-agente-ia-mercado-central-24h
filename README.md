@@ -201,6 +201,12 @@ GOOGLE_API_KEY=tu_api_key_aqui
 streamlit run agente_ia.py
 ```
 
+### ✨🛒 ¡Pruébalo en vivo, sin instalar nada! 🛒✨
+
+Haz clic en el botón y empieza a chatear con el agente directamente desde tu navegador 👇
+
+[![Abrir Demo en Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://proyecto-final-alura-agente-ia-mercado-central-24h.streamlit.app/)
+
 ## 💬 Ejemplo de uso
 
 ```
