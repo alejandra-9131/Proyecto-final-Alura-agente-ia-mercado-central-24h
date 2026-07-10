@@ -46,13 +46,13 @@ SYSTEM_PROMPT = (
     "4. Responde siempre con un tono profesional, claro, usando viñetas y emojis para estructurar los reportes de manera ejecutiva y legible."
 )
 
-lista_herramientas = herramientas_cargadas()
+#lista_herramientas = herramientas_cargadas()
 
-agente_ejecutor = create_agent(
-    model=llm,
-    tools=lista_herramientas,
-    system_prompt=SYSTEM_PROMPT,
-)
+#agente_ejecutor = create_agent(
+#    model=llm,
+#    tools=lista_herramientas,
+#    system_prompt=SYSTEM_PROMPT,
+#)
 
 # ---------------------------------------------------------
 # Función para hacer preguntas al agente
@@ -65,6 +65,13 @@ def hacer_consulta_al_agente():
 
     with st.spinner("⏳ Procesando tu consulta, un momento por favor"):
         try:
+
+            lista_herramientas_frescas = herramientas_cargadas()
+            agente_ejecutor = create_agent(
+                model=llm,
+                tools=lista_herramientas_frescas,
+                system_prompt=SYSTEM_PROMPT,
+            )
             mensajes = st.session_state["datos_historial"] + [
                 {"role": "user", "content": pregunta}
             ]
@@ -199,7 +206,7 @@ with col_derecha:
             Estoy listo para ayudarte a analizar los niveles de inventario, políticas, preguntas frecuentes, reglamento interno y manuales de la empresa.
         </p>
         <p style="margin: 0; color: #1e88e5; font-weight: 500;">
-            📌 <b>Para comenzar:</b> Selecciona uno de los botones de Muestras del Mercado en el panel lateral 👇.
+            📌 <b>Para comenzar:</b> Selecciona una opción del Menú ubicado en el panel lateral 👇.
         </p>
     </div>
     """, unsafe_allow_html=True)

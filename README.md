@@ -17,7 +17,7 @@
 ![Matplotlib](https://img.shields.io/badge/MATPLOTLIB-GR%C3%81FICAS-11557C?style=for-the-badge&logo=plotly&logoColor=white)
 ![PyPDF](https://img.shields.io/badge/PYPDF-LECTURA%20PDF-EC1C24?style=for-the-badge)
 
-![Estado](https://img.shields.io/badge/ESTADO-EN%20FINALIZADO-yellow?style=for-the-badge)
+
 
 </div>
 
@@ -144,7 +144,6 @@ El agente utiliza los siguientes documentos como base de conocimiento:
 |---|---|---|
 | `Inventario_Supermercado_24H.xlsx` | Excel | Existencias, precios y categorías de productos |
 | `Manual de Proveedores y Política de Compras.pdf` | PDF | Lineamientos de compras y relación con proveedores |
-| `Mercado_Central_24h.txt` | Texto | Información general del supermercado |
 | `Politica_Atencion_Cliente_cambios_devoluciones.pdf` | PDF | Política de cambios y devoluciones |
 | `Preguntas_Frecuentes_(FAQ)_Mercado.pdf` | PDF | Preguntas frecuentes de clientes |
 | `Reglamento_Interno_Procedimientos.pdf` | PDF | Procedimientos y reglamento interno |
